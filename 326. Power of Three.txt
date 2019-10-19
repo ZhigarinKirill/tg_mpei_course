@@ -7,7 +7,7 @@ public:
         if (sub == 1)
             return 1;
             else return 0;*/
-        if (n == 1)
+        if (n == 1) 
             return 1;
    
         if ((n%3 == 0)&&(n>1))
