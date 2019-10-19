@@ -3,7 +3,7 @@ class Solution {
 public:
     string multiply(string num1, string num2) 
     {
-        string res(num1.size()+num2.size(), '0');
+        string res(num1.size()+num2.size(), '0'); 
         string reslast = "";
         int sur = 0;
         int ex = 0;
