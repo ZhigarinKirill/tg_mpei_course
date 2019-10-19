@@ -1,6 +1,6 @@
 //https://leetcode.com/problems/hamming-distance/
 class Solution {
-public:
+public: 
     int hammingDistance(int x, int y) {
         int dist = 0;
         while((x)||(y))
