@@ -1,0 +1,25 @@
+https://leetcode.com/problems/broken-calculator/
+class Solution {
+public:
+    int brokenCalc(int X, int Y) {
+       /* if (X >= Y)
+            return X - Y;
+        int k = 0;
+        while (Y != X){
+            if ((Y % 2 == 0) && (Y > X)){
+                Y/=2;
+                k++;
+            }
+            else{
+                Y++;
+                k++;
+            }
+        }
+        return k;*/
+        if (X >= Y)
+            return X - Y;
+        if (Y % 2 == 0)
+            return brokenCalc(X, Y/2) + 1;
+        return brokenCalc(X, Y+1) + 1;       
+    }
+};
