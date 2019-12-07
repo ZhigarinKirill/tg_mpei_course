@@ -1,0 +1,29 @@
+//https://leetcode.com/problems/binary-tree-maximum-path-sum/
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    
+    int max_sum(TreeNode* node, int &sum){
+        if (!node)
+            return 0;
+        int left_node = max_sum(node->left, sum);
+        int right_node = max_sum(node->right, sum);
+        sum = max({node->val, left_node + right_node + node->val, left_node + node->val, right_node + node->val, sum});
+        return max({left_node + node->val, right_node + node->val, node->val});    
+    }
+    
+    
+    int maxPathSum(TreeNode* root) {
+        int sum = INT_MIN;
+        int sub = max_sum(root, sum);
+        return sum;
+    }
+};

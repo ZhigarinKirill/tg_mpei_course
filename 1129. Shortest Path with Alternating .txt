@@ -1,0 +1,38 @@
+//https://leetcode.com/problems/shortest-path-with-alternating-colors/
+class Solution {
+public:
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& red_edges, vector<vector<int>>& blue_edges) {
+        vector<vector<int>> g_red(n);
+        vector<vector<int>> g_blue(n);
+        for (auto& r : red_edges)
+            g_red[r.front()].push_back(r.back());
+        for (auto& b : blue_edges)
+            g_blue[b.front()].push_back(b.back());
+        vector<int> dist(n, -1);
+        vector<vector<bool>> vis(n, vector<bool>(2, false));
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        q.push({0, 1});
+        vis[0][0] = vis[0][1] = true;
+        int level = 0;
+        while (!q.empty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                auto cur = q.front();
+                q.pop();
+                if (dist[cur.first] == -1)
+                    dist[cur.first] = level;
+                auto& temp_ed = cur.second ? g_red : g_blue;
+                int temp_col = cur.second ? 0 : 1;
+                for (auto& next : temp_ed[cur.first]) {
+                    if (!vis[next][temp_col]) {
+                        vis[next][temp_col] = 1;
+                        q.push({next, temp_col});
+                    }
+                }
+            }
+            ++level;
+        }
+        return dist;
+    }
+};

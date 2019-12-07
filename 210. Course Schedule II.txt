@@ -1,0 +1,31 @@
+//https://leetcode.com/problems/course-schedule-ii/
+class Solution {
+public:
+    
+    bool dfs(const vector<vector<int>>& g, vector<int>& vis, vector<int>& rev_order, const int& num) {
+        if (vis[num] == 1)
+            return true;
+        if (vis[num] == -1)
+            return false;
+        vis[num] = -1;
+        for (const auto& item : g[num])
+            if (!dfs(g, vis, rev_order, item))
+                return false;
+        vis[num] = 1;
+        rev_order.push_back(num);
+        return true;
+    }
+    
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> g(numCourses);
+        vector<int> vis(numCourses);
+        vector<int> order;
+        for (const auto& item : prerequisites)
+            g[item.back()].push_back(item.front());
+        for (int i = 0; i < numCourses; i++)
+            if (!dfs(g, vis, order, i))
+                return {};
+        reverse(order.begin(), order.end());
+        return order;
+    }
+};
