@@ -1,0 +1,59 @@
+//https://leetcode.com/problems/ugly-number-ii/
+class Solution {
+public:
+    
+     void sift_down(vector<long long>& nums, size_t i) {
+        while (2 * i + 1 < nums.size()) {
+            size_t left = 2 * i + 1;
+            size_t right = 2 * i + 2;
+            size_t j = left;
+            if (right < nums.size() && nums[j] > nums[right])
+                j = right;
+            if (nums[j] >= nums[i])
+                return;
+            swap(nums[i], nums[j]);
+                i = j;
+        }
+    }
+    
+    void sift_up(vector<long long>& nums, size_t i) {
+        while (i > 0 && nums[i] < nums[(i - 1) / 2]) {    
+            swap(nums[i], nums[(i - 1) / 2]);
+            i = (i - 1) / 2;
+        }
+    }
+    
+    
+    int extract_min(vector<long long>& nums) {
+        long long res = nums[0];
+        nums[0] = nums[nums.size() - 1];
+        nums.erase(nums.end() - 1);
+        sift_down(nums, 0);
+        return res;
+    }
+    
+    void insert(vector<long long>& nums, long long val) {
+        nums.push_back(val);
+        sift_up(nums, nums.size() - 1);
+    }
+    
+    int nthUglyNumber(int n) {
+        vector<long long> nums = {1};
+        vector<int> primes = {2, 3, 5};
+        unordered_set<long long> vis;
+        vis.insert(1);
+        long long res = 0;
+        long long cur = 1;
+        while (cur <= n) {
+            res = extract_min(nums);
+            for (const int& p : primes) {
+                if (!vis.count(res * p)) {
+                    insert(nums, res * p);
+                    vis.insert(res * p);
+                }
+            }
+            ++cur;
+        }
+        return res;
+    }
+};

@@ -1,0 +1,49 @@
+//https://leetcode.com/problems/last-stone-weight/
+class Solution {
+public:
+    
+    void sift_down(vector<int>& nums, size_t i) {
+        while (2 * i + 1 < nums.size()) {
+            size_t left = 2 * i + 1;
+            size_t right = 2 * i + 2;
+            size_t j = left;
+            if (right < nums.size() && nums[j] < nums[right])
+                j = right;
+            if (nums[j] <= nums[i])
+                return;
+            swap(nums[i], nums[j]);
+                i = j;
+        }
+    }
+    
+    void sift_up(vector<int>& nums, size_t i) {
+        while (i > 0 && nums[i] > nums[(i - 1) / 2]) {    
+            swap(nums[i], nums[(i - 1) / 2]);
+            i = (i - 1) / 2;
+        }
+    }
+    
+    int extract_max(vector<int>& nums) {
+        int res = nums[0];
+        nums[0] = nums[nums.size() - 1];
+        nums.erase(nums.end() - 1);
+        sift_down(nums, 0);
+        return res;
+    }
+    
+    int lastStoneWeight(vector<int>& stones) {
+        for (size_t i = stones.size() / 2 + 1; i > 0; --i)
+            sift_down(stones, i - 1);
+        while (stones.size() > 1) {
+            int y = extract_max(stones),
+            x = extract_max(stones);
+            if (x != y) {
+                stones.push_back(y - x);
+                sift_up(stones, stones.size() - 1);
+            }
+        }
+        if (!stones.empty())
+            return stones[0];
+        return 0;
+    }
+};

@@ -1,0 +1,18 @@
+//https://leetcode.com/problems/cheapest-flights-within-k-stops/
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+        vector<int> d(n, 1e9);
+        vector<int> d_p(n, 1e9);
+        d[src] = d_p[src] = 0;
+        for (int i = 0; i <= K; i++) {
+            for (const auto e : flights)
+                if (d[e[1]] > d_p[e[0]] + e[2])
+                    d[e[1]] = d_p[e[0]] + e[2];
+            swap(d, d_p);
+        }
+        if (d_p[dst] == 1e9)
+            return -1;
+        return d_p[dst];
+    }
+};

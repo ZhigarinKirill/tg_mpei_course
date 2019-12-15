@@ -1,0 +1,36 @@
+//https://leetcode.com/problems/kth-largest-element-in-an-array/
+class Solution {
+public:
+    
+    void sift_down(vector<int>& nums, size_t i) {
+        while (2 * i + 1 < nums.size()) {
+            size_t left = 2 * i + 1;
+            size_t right = 2 * i + 2;
+            size_t j = left;
+            if (right < nums.size() && nums[j] < nums[right])
+                j = right;
+            if (nums[j] <= nums[i])
+                return;
+            swap(nums[i], nums[j]);
+                i = j;
+        }
+    }
+    
+    
+    int delete_max(vector<int>& nums) {
+        int res = nums[0];
+        nums[0] = nums[nums.size() - 1];
+        nums.erase(nums.end() - 1);
+        sift_down(nums, 0);
+        return res;
+    }
+    
+    int findKthLargest(vector<int>& nums, int k) {
+        for (size_t i = nums.size() / 2 + 1; i > 0; --i) 
+            sift_down(nums, i - 1);
+        int res = 0;
+        for (size_t i = 0; i < k; i++) 
+            res = delete_max(nums);
+        return res;
+    }   
+};

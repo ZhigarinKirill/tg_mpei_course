@@ -1,0 +1,50 @@
+//https://leetcode.com/problems/top-k-frequent-elements/
+class Solution {
+public:
+    
+    void sift_down(vector<pair<int, int>>& nums, size_t i) {
+        while (2 * i + 1 < nums.size()) {
+            size_t left = 2 * i + 1;
+            size_t right = 2 * i + 2;
+            size_t j = left;
+            if (right < nums.size() && nums[j].first < nums[right].first)
+                j = right;
+            if (nums[j].first <= nums[i].first)
+                return;
+            swap(nums[i], nums[j]);
+                i = j;
+        }
+    }
+    
+    
+    pair<int, int> extract_max (vector<pair<int, int>>& nums) {
+        pair<int, int> res = nums[0];
+        nums[0] = nums[nums.size() - 1];
+        nums.erase(nums.end() - 1);
+        sift_down(nums, 0);
+        return res;
+    }
+    
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        if (nums.empty())
+            return nums;
+        unordered_map<int, int> freq_map;
+        for (const auto& num : nums)
+            freq_map[num]++;
+        
+        vector<pair<int, int>> freq_vec;
+        for (const auto& item : freq_map) 
+            freq_vec.push_back(make_pair(item.second, item.first));
+        
+        vector<int> res;
+        
+        for (size_t i = freq_vec.size() / 2 + 1; i > 0; --i) 
+            sift_down(freq_vec, i - 1);
+        
+        for (size_t i = 0; i < k; ++i) {
+            pair<int, int> temp = extract_max(freq_vec);
+            res.push_back(temp.second);
+        }
+        return res;
+    }
+};
